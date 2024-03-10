@@ -168,6 +168,7 @@ namespace GraThing_by_TaniachiFractal
         /// </summary>
         private void GraphForm_ResizeEnd(object sender, EventArgs e)
         {
+            ChangeGrid(0);
             DrawAll();
         }
 
@@ -184,8 +185,7 @@ namespace GraThing_by_TaniachiFractal
         /// </summary>
         private void GraphForm_MouseWheel(object sender, MouseEventArgs e)
         {
-            ChangeGrid(e.Delta);
-            DrawAll();
+            if (ChangeGrid(e.Delta)) DrawAll();
         }
 
         /// <summary>
@@ -221,8 +221,6 @@ namespace GraThing_by_TaniachiFractal
         }
 
 
-
-
         #endregion
 
         #region render
@@ -230,26 +228,46 @@ namespace GraThing_by_TaniachiFractal
         /// <summary>
         /// Change the grid size and increment
         /// </summary>
-        private void ChangeGrid(int wheelDelta)
+        /// <returns>Whether to initiate redraw</returns>
+        private bool ChangeGrid(int wheelDelta)
         {
-            int newGridSize = gridSize + wheelDelta / 30;
-            if (newGridSize > 1) gridSize = newGridSize;
+            int direction = Sign(wheelDelta);
+            double newGridSize, newGridIncrement = gridIncrement, newStep = step;
+            #region newGridSize
+            if (gridSize < 40)
+                newGridSize = gridSize + direction * 10;
+            else
+                newGridSize = gridSize + direction * 20;
 
-            if (gridSize < 5)
+            newGridSize -= newGridSize % 10;
+
+            if (newGridSize < 1) newGridSize = 1;
+            if (newGridSize > winWidth / 2) newGridSize = winWidth / 2;
+            #endregion
+            if (gridSize == (int)newGridSize) return false;
+
+            if (newGridSize <= 10)
             {
-                gridSize *= 10;
-                gridIncrement *= 10;
+                newGridSize = 100;
+                newGridIncrement *= 10;
             }
-            else if (gridSize > 100)
+            else if (newGridSize >= 100)
             {
-                gridSize /= 10;
-                gridIncrement /= 10;
+                newGridSize = 10;
+                newGridIncrement /= 10;
             }
 
-            if (gridIncrement > 1) gridIncrement = (int)gridIncrement;
-            step = gridIncrement * gridSize / 100;
+            newStep = newGridIncrement / 100;
 
-            this.Text = gridSize.ToString() + " " + gridIncrement.ToString() + " " + step;
+            if (newGridIncrement > 0.00001)
+            {
+                step = newStep;
+                gridIncrement = newGridIncrement;
+                gridSize = (int)newGridSize;
+            }
+            else return false;
+
+            return true;
         }
 
         /// <summary>
@@ -262,9 +280,9 @@ namespace GraThing_by_TaniachiFractal
             #region coords
 
             Point vertAxisEnd = new Point(horizMiddle, Cnst.padding),
-                  vertAxisStart = new Point(horizMiddle, winHeight - Cnst.padding * 5),
+                  vertAxisStart = new Point(horizMiddle, winHeight),
                   horizAxisEnd = new Point(winWidth - Cnst.padding * 3, vertMiddle),
-                  horizAxisStart = new Point(Cnst.padding, vertMiddle),
+                  horizAxisStart = new Point(0, vertMiddle),
                   center = new Point(horizMiddle, vertMiddle);
 
             #endregion
@@ -364,25 +382,25 @@ namespace GraThing_by_TaniachiFractal
             //  → >
             int currDistFromZero = gridSize;
             double i = gridIncrement;
-            while (currDistFromZero < winWidth / 2 - Cnst.padding * 3)
+            while (currDistFromZero < winWidth)
             {
                 DrawStripAndNum(i, currDistFromZero, false); i += gridIncrement;
                 currDistFromZero += gridSize;
             }
-            currMaxX = (int)i;
+            currMaxX = (int)i; if (currMaxX < 1) { currMaxX = 1; }
             //  < ←
             i = -gridIncrement;
             currDistFromZero = -gridSize;
-            while (currDistFromZero > -winWidth / 2 + Cnst.padding * 2)
+            while (currDistFromZero > -winWidth)
             {
                 DrawStripAndNum(i, currDistFromZero, false); i -= gridIncrement;
                 currDistFromZero -= gridSize;
             }
-            currMinX = (int)i;
+            currMinX = (int)i; if (currMinX > -1) { currMinX = -1; }
             //  ↓ \/
             i = -gridIncrement;
             currDistFromZero = gridSize;
-            while (currDistFromZero < winHeight / 2 - Cnst.padding * 4)
+            while (currDistFromZero < winHeight)
             {
                 DrawStripAndNum(i, currDistFromZero, true); i -= gridIncrement;
                 currDistFromZero += gridSize;
@@ -390,7 +408,7 @@ namespace GraThing_by_TaniachiFractal
             // ↑ /\
             i = gridIncrement;
             currDistFromZero = -gridSize;
-            while (currDistFromZero > -winHeight / 2 + Cnst.padding * 3)
+            while (currDistFromZero > -winHeight)
             {
                 DrawStripAndNum(i, currDistFromZero, true); i += gridIncrement;
                 currDistFromZero -= gridSize;
@@ -471,6 +489,7 @@ namespace GraThing_by_TaniachiFractal
         /// </summary>
         private void DrawOnePolarFromRGraph(Func<double, double> graphFunct, int graphNum)
         {
+            if (step > 0.1) step = 0.1;
             for (double i = currMinX * 2; i < currMaxX * 2; i += step)
             {
                 DrawPolarFromRGraphLine(graphFunct, i, i + step, graphNum);
@@ -491,7 +510,6 @@ namespace GraThing_by_TaniachiFractal
         #endregion
 
         #region polar from Phi
-
 
         /// <summary>
         /// Draw a polar from Phi graph line
@@ -519,6 +537,7 @@ namespace GraThing_by_TaniachiFractal
         /// </summary>
         private void DrawOnePolarFromPhiGraph(Func<double, double> graphFunct, int graphNum)
         {
+            if (step > 0.1) step = 0.1;
             for (double i = currMinX * 2; i < currMaxX * 2; i += step)
             {
                 DrawPolarFromPhiGraphLine(graphFunct, i, i + step, graphNum);
@@ -635,6 +654,14 @@ namespace GraThing_by_TaniachiFractal
 
         }
 
+        /// <returns>-1 if input less than 0, 1 if input more than 0, 0 if input=0</returns>
+        int Sign(int input)
+        {
+            if (input > 0) return 1;
+            if (input < 0) return -1;
+            return 0;
+        }
+
         #endregion
 
         #region init
@@ -715,7 +742,7 @@ namespace GraThing_by_TaniachiFractal
         /// </summary>
         private void InitCartesianGraphs()
         {
-            GraphFunction_cartesian.Add(SinX);
+            GraphFunction_cartesian.Add(Xpow2);
             GraphFunction_cartesian.Add(SinX);
             GraphFunction_cartesian.Add(Math.Log);
 
@@ -735,7 +762,7 @@ namespace GraThing_by_TaniachiFractal
         private void InitPolarFromRGraphs()
         {
 
-            GraphFunction_polarFromR.Add(cool);
+            GraphFunction_polarFromR.Add(Xpow2);
             GraphFunction_polarFromR.Add(SinX);
             GraphFunction_polarFromR.Add(eq2);
 
@@ -754,7 +781,7 @@ namespace GraThing_by_TaniachiFractal
         /// </summary>
         private void InitPolarFromPhiGraphs()
         {
-            GraphFunction_polarFromPhi.Add(SinX);
+            GraphFunction_polarFromPhi.Add(Xpow2);
             GraphFunction_polarFromPhi.Add(Cos);
             GraphFunction_polarFromPhi.Add(eq2);
 
@@ -775,7 +802,7 @@ namespace GraThing_by_TaniachiFractal
         private void InitParametricGraphs()
         {
             GraphFunction_parametric.Add(Tparam);
-            GraphFunction_parametric.Add(CircleParam);
+            GraphFunction_parametric.Add(Tparam);
             GraphFunction_parametric.Add(Ellipse);
 
             GraphFunction_parametric.Add(Tparam);
@@ -832,7 +859,7 @@ namespace GraThing_by_TaniachiFractal
 
         double HalfCircle(double x)
         {
-            return Math.Sqrt(5 - x * x);
+            return Math.Sqrt(4 - x * x);
         }
 
         double eqX(double x)
