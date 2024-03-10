@@ -223,8 +223,28 @@ namespace GraThing_by_TaniachiFractal
 
         #endregion
 
-        #region render
+        #region init
 
+        /// <summary>
+        /// recalc variables
+        /// </summary>
+        private void ReInitVars()
+        {
+            canvas = this.CreateGraphics();
+
+            winWidth = this.Width;
+            winHeight = this.Height;
+
+            arrowHeight = winWidth / 150; if (arrowHeight < 6) arrowHeight = 6;
+            arrowWidth = arrowHeight / 2;
+            horizMiddle = winWidth / 2 - Cnst.padding;
+            vertMiddle = winHeight / 2 - Cnst.padding;
+
+            incrFntSz = winWidth / 40 / 3; if (incrFntSz > 5) incrFntSz = 5;
+            InitCartesianGraphs();
+            InitParametricGraphs();
+            InitPolarFromRGraphs();
+        }
         /// <summary>
         /// Change the grid size and increment
         /// </summary>
@@ -257,7 +277,9 @@ namespace GraThing_by_TaniachiFractal
                 newGridIncrement /= 10;
             }
 
-            newStep = newGridIncrement / 100;
+            newStep = newGridIncrement/100;
+
+            this.Text = "" + newStep;
 
             if (newGridIncrement > 0.00001)
             {
@@ -269,6 +291,138 @@ namespace GraThing_by_TaniachiFractal
 
             return true;
         }
+
+        /// <summary>
+        /// Init variables
+        /// </summary>
+        private void InitVars()
+        {
+            /* For whatever reason, this is not present in designer.
+             So I have to do it myself */
+            this.MouseWheel += GraphForm_MouseWheel;
+
+            canvas = this.CreateGraphics();
+
+            winWidth = this.Width;
+            winHeight = this.Height;
+
+            arrowHeight = winWidth / 150; if (arrowHeight < 6) arrowHeight = 6;
+            arrowWidth = arrowHeight / 2;
+            horizMiddle = winWidth / 2 - Cnst.padding;
+            vertMiddle = winHeight / 2 - Cnst.padding;
+
+            incrFntSz = winWidth / 40 / 3; if (incrFntSz > 8) incrFntSz = 8;
+
+            AxisPen = new Pen(Colors.AxisColor, 1);
+            StripPen = new Pen(Colors.StripColor, 1);
+            Stripbrush = new SolidBrush(Colors.StripColor);
+
+            InitGraphPens();
+            stripSize = 4;
+            gridIncrement = 1;
+            HorizAxisName = "x";
+            VertAxisName = "y";
+            gridSize = 30;
+            step = 0.01;
+
+            InitCartesianGraphs();
+            InitParametricGraphs();
+            InitPolarFromRGraphs();
+            InitPolarFromPhiGraphs();
+        }
+
+        /// <summary>
+        /// Initialize pens for all graphs
+        /// </summary>
+        private void InitGraphPens()
+        {
+            for (int i = 0; i < Cnst.MaxGraphCount; i++)
+            {
+                GraphPen[i] = new Pen(Colors.GraphColor[i], 1);
+            }
+        }
+
+        /// <summary>
+        /// Init current cartesian graphs functions
+        /// </summary>
+        private void InitCartesianGraphs()
+        {
+            GraphFunction_cartesian.Add(Math.Tan);
+            GraphFunction_cartesian.Add(SinX);
+            GraphFunction_cartesian.Add(Math.Log);
+
+            GraphFunction_cartesian.Add(Hyperbola);
+            GraphFunction_cartesian.Add(HalfCircle);
+            GraphFunction_cartesian.Add(eqX);
+
+            GraphFunction_cartesian.Add(Math.Tan);
+            GraphFunction_cartesian.Add(Math.Cos);
+            GraphFunction_cartesian.Add(Math.Round);
+
+            GraphFunction_cartesian.Add(Math.Abs);
+        }
+        /// <summary>
+        /// Init current polar graphs from R functions
+        /// </summary>
+        private void InitPolarFromRGraphs()
+        {
+
+            GraphFunction_polarFromR.Add(Xpow2);
+            GraphFunction_polarFromR.Add(SinX);
+            GraphFunction_polarFromR.Add(eq2);
+
+            GraphFunction_polarFromR.Add(Hyperbola);
+            GraphFunction_polarFromR.Add(HalfCircle);
+            GraphFunction_polarFromR.Add(eqX);
+
+            GraphFunction_polarFromR.Add(Math.Tan);
+            GraphFunction_polarFromR.Add(Math.Cos);
+            GraphFunction_polarFromR.Add(Math.Log);
+
+            GraphFunction_polarFromR.Add(Math.Abs);
+        }
+        /// <summary>
+        /// Init current polar graphs from Phi functions
+        /// </summary>
+        private void InitPolarFromPhiGraphs()
+        {
+            GraphFunction_polarFromPhi.Add(Xpow2);
+            GraphFunction_polarFromPhi.Add(Cos);
+            GraphFunction_polarFromPhi.Add(eq2);
+
+            GraphFunction_polarFromPhi.Add(Hyperbola);
+            GraphFunction_polarFromPhi.Add(HalfCircle);
+            GraphFunction_polarFromPhi.Add(eqX);
+
+            GraphFunction_polarFromPhi.Add(Math.Tan);
+            GraphFunction_polarFromPhi.Add(Math.Cos);
+            GraphFunction_polarFromPhi.Add(Math.Log);
+
+            GraphFunction_polarFromPhi.Add(Math.Abs);
+        }
+        /// <summary>
+        /// Init current parametric graphs functions
+        /// </summary>
+        private void InitParametricGraphs()
+        {
+            GraphFunction_parametric.Add(Tparam);
+            GraphFunction_parametric.Add(Tparam);
+            GraphFunction_parametric.Add(Ellipse);
+
+            GraphFunction_parametric.Add(Tparam);
+            GraphFunction_parametric.Add(CircleParam);
+            GraphFunction_parametric.Add(Ellipse);
+
+            GraphFunction_parametric.Add(Tparam);
+            GraphFunction_parametric.Add(CircleParam);
+            GraphFunction_parametric.Add(Ellipse);
+
+            GraphFunction_parametric.Add(Tparam);
+        }
+
+        #endregion
+
+        #region render
 
         /// <summary>
         /// Redraw all the secondary elements on the form except for strips (they take too much time to update)
@@ -435,6 +589,7 @@ namespace GraThing_by_TaniachiFractal
                 try { canvas.DrawLine(GraphPen[graphNum], start, end); }
                 catch { } // Draw line
             }
+
         }
 
         /// <summary>
@@ -623,7 +778,7 @@ namespace GraThing_by_TaniachiFractal
             {
                 return Cnst.undefined;
             }
-            if (finY > winHeight * 2 || finY < -winHeight)
+            if (finY > winHeight * 2 || finY < -winHeight * 2)
             {
                 return Cnst.undefined;
             }
@@ -660,160 +815,6 @@ namespace GraThing_by_TaniachiFractal
             if (input > 0) return 1;
             if (input < 0) return -1;
             return 0;
-        }
-
-        #endregion
-
-        #region init
-
-        /// <summary>
-        /// recalc variables
-        /// </summary>
-        private void ReInitVars()
-        {
-            canvas = this.CreateGraphics();
-
-            winWidth = this.Width;
-            winHeight = this.Height;
-
-            arrowHeight = winWidth / 150; if (arrowHeight < 6) arrowHeight = 6;
-            arrowWidth = arrowHeight / 2;
-            horizMiddle = winWidth / 2 - Cnst.padding;
-            vertMiddle = winHeight / 2 - Cnst.padding;
-
-            incrFntSz = winWidth / 40 / 3; if (incrFntSz > 5) incrFntSz = 5;
-            InitCartesianGraphs();
-            InitParametricGraphs();
-            InitPolarFromRGraphs();
-        }
-
-        /// <summary>
-        /// Init variables
-        /// </summary>
-        private void InitVars()
-        {
-            /* For whatever reason, this is not present in designer.
-             So I have to do it myself */
-            this.MouseWheel += GraphForm_MouseWheel;
-
-            canvas = this.CreateGraphics();
-
-            winWidth = this.Width;
-            winHeight = this.Height;
-
-            arrowHeight = winWidth / 150; if (arrowHeight < 6) arrowHeight = 6;
-            arrowWidth = arrowHeight / 2;
-            horizMiddle = winWidth / 2 - Cnst.padding;
-            vertMiddle = winHeight / 2 - Cnst.padding;
-
-            incrFntSz = winWidth / 40 / 3; if (incrFntSz > 8) incrFntSz = 8;
-
-            AxisPen = new Pen(Colors.AxisColor, 1);
-            StripPen = new Pen(Colors.StripColor, 1);
-            Stripbrush = new SolidBrush(Colors.StripColor);
-
-            InitGraphPens();
-            stripSize = 4;
-            gridIncrement = 1;
-            HorizAxisName = "x";
-            VertAxisName = "y";
-            gridSize = 30;
-            step = 0.01;
-
-            InitCartesianGraphs();
-            InitParametricGraphs();
-            InitPolarFromRGraphs();
-            InitPolarFromPhiGraphs();
-        }
-
-        /// <summary>
-        /// Initialize pens for all graphs
-        /// </summary>
-        private void InitGraphPens()
-        {
-            for (int i = 0; i < Cnst.MaxGraphCount; i++)
-            {
-                GraphPen[i] = new Pen(Colors.GraphColor[i], 1);
-            }
-        }
-
-        /// <summary>
-        /// Init current cartesian graphs functions
-        /// </summary>
-        private void InitCartesianGraphs()
-        {
-            GraphFunction_cartesian.Add(Xpow2);
-            GraphFunction_cartesian.Add(SinX);
-            GraphFunction_cartesian.Add(Math.Log);
-
-            GraphFunction_cartesian.Add(Hyperbola);
-            GraphFunction_cartesian.Add(HalfCircle);
-            GraphFunction_cartesian.Add(eqX);
-
-            GraphFunction_cartesian.Add(Math.Tan);
-            GraphFunction_cartesian.Add(Math.Cos);
-            GraphFunction_cartesian.Add(Math.Round);
-
-            GraphFunction_cartesian.Add(Math.Abs);
-        }
-        /// <summary>
-        /// Init current polar graphs from R functions
-        /// </summary>
-        private void InitPolarFromRGraphs()
-        {
-
-            GraphFunction_polarFromR.Add(Xpow2);
-            GraphFunction_polarFromR.Add(SinX);
-            GraphFunction_polarFromR.Add(eq2);
-
-            GraphFunction_polarFromR.Add(Hyperbola);
-            GraphFunction_polarFromR.Add(HalfCircle);
-            GraphFunction_polarFromR.Add(eqX);
-
-            GraphFunction_polarFromR.Add(Math.Tan);
-            GraphFunction_polarFromR.Add(Math.Cos);
-            GraphFunction_polarFromR.Add(Math.Log);
-
-            GraphFunction_polarFromR.Add(Math.Abs);
-        }
-        /// <summary>
-        /// Init current polar graphs from Phi functions
-        /// </summary>
-        private void InitPolarFromPhiGraphs()
-        {
-            GraphFunction_polarFromPhi.Add(Xpow2);
-            GraphFunction_polarFromPhi.Add(Cos);
-            GraphFunction_polarFromPhi.Add(eq2);
-
-            GraphFunction_polarFromPhi.Add(Hyperbola);
-            GraphFunction_polarFromPhi.Add(HalfCircle);
-            GraphFunction_polarFromPhi.Add(eqX);
-
-            GraphFunction_polarFromPhi.Add(Math.Tan);
-            GraphFunction_polarFromPhi.Add(Math.Cos);
-            GraphFunction_polarFromPhi.Add(Math.Log);
-
-            GraphFunction_polarFromPhi.Add(Math.Abs);
-        }
-
-        /// <summary>
-        /// Init current parametric graphs functions
-        /// </summary>
-        private void InitParametricGraphs()
-        {
-            GraphFunction_parametric.Add(Tparam);
-            GraphFunction_parametric.Add(Tparam);
-            GraphFunction_parametric.Add(Ellipse);
-
-            GraphFunction_parametric.Add(Tparam);
-            GraphFunction_parametric.Add(CircleParam);
-            GraphFunction_parametric.Add(Ellipse);
-
-            GraphFunction_parametric.Add(Tparam);
-            GraphFunction_parametric.Add(CircleParam);
-            GraphFunction_parametric.Add(Ellipse);
-
-            GraphFunction_parametric.Add(Tparam);
         }
 
         #endregion
