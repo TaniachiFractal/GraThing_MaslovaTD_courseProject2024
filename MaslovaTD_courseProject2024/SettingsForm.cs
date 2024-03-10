@@ -4,6 +4,9 @@ using System.Windows.Forms;
 
 namespace GraThing_by_TaniachiFractal
 {
+    /// <summary>
+    /// The form for inputing the functions
+    /// </summary>
     public partial class SettingsForm : Form
     {
         #region data

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using static System.Windows.Forms.AxHost;
 
 namespace GraThing_by_TaniachiFractal
 {
+    /// <summary>
+    /// The form that draws the graphs written in settings form
+    /// </summary>
     public partial class GraphForm : Form
     {
         #region public
@@ -34,11 +36,11 @@ namespace GraThing_by_TaniachiFractal
             {
                 case Cnst.CARTESIAN_ID:
                     DrawCartesianGraphs(); break;
-                case Cnst.POLARfromR_ID: 
+                case Cnst.POLARfromR_ID:
                     DrawPolarGraphs_fromR(); break;
                 case Cnst.POLARfromPHI_ID:
                     DrawPolarGraphs_fromPhi(); break;
-                case Cnst.PARAM_ID: 
+                case Cnst.PARAM_ID:
                     DrawParametricGraphs(); break;
             }
         }
@@ -139,7 +141,7 @@ namespace GraThing_by_TaniachiFractal
         /// <summary>
         /// The parametric functions that are drawn currently
         /// </summary>
-        List<Func<double, (double, double)>> GraphFunction_parametric = new List<Func<double, (double,double)>>();
+        List<Func<double, (double, double)>> GraphFunction_parametric = new List<Func<double, (double, double)>>();
 
         #endregion
 
@@ -202,7 +204,7 @@ namespace GraThing_by_TaniachiFractal
         {
             InitVars();
         }
-        
+
         /// <summary>
         /// Redraw axis
         /// </summary>
@@ -218,8 +220,8 @@ namespace GraThing_by_TaniachiFractal
             oldWindowState = WindowState;
         }
 
-     
-       
+
+
 
         #endregion
 
@@ -238,14 +240,14 @@ namespace GraThing_by_TaniachiFractal
                 gridSize *= 10;
                 gridIncrement *= 10;
             }
-            else if(gridSize>100)
+            else if (gridSize > 100)
             {
                 gridSize /= 10;
                 gridIncrement /= 10;
             }
 
             if (gridIncrement > 1) gridIncrement = (int)gridIncrement;
-            step = gridIncrement*gridSize / 100;
+            step = gridIncrement * gridSize / 100;
 
             this.Text = gridSize.ToString() + " " + gridIncrement.ToString() + " " + step;
         }
@@ -345,7 +347,7 @@ namespace GraThing_by_TaniachiFractal
                 }
 
                 canvas.DrawString(num.ToString(), new Font(FontFamily.GenericSansSerif, incrFntSz), Stripbrush,
-                    drawStart);               
+                    drawStart);
             }
 
             // Draw both
@@ -362,7 +364,7 @@ namespace GraThing_by_TaniachiFractal
             //  → >
             int currDistFromZero = gridSize;
             double i = gridIncrement;
-            while (currDistFromZero < winWidth/2-Cnst.padding*3)
+            while (currDistFromZero < winWidth / 2 - Cnst.padding * 3)
             {
                 DrawStripAndNum(i, currDistFromZero, false); i += gridIncrement;
                 currDistFromZero += gridSize;
@@ -371,7 +373,7 @@ namespace GraThing_by_TaniachiFractal
             //  < ←
             i = -gridIncrement;
             currDistFromZero = -gridSize;
-            while (currDistFromZero > -winWidth/2+Cnst.padding*2 )
+            while (currDistFromZero > -winWidth / 2 + Cnst.padding * 2)
             {
                 DrawStripAndNum(i, currDistFromZero, false); i -= gridIncrement;
                 currDistFromZero -= gridSize;
@@ -380,7 +382,7 @@ namespace GraThing_by_TaniachiFractal
             //  ↓ \/
             i = -gridIncrement;
             currDistFromZero = gridSize;
-            while (currDistFromZero < winHeight/2 - Cnst.padding * 4)
+            while (currDistFromZero < winHeight / 2 - Cnst.padding * 4)
             {
                 DrawStripAndNum(i, currDistFromZero, true); i -= gridIncrement;
                 currDistFromZero += gridSize;
@@ -388,7 +390,7 @@ namespace GraThing_by_TaniachiFractal
             // ↑ /\
             i = gridIncrement;
             currDistFromZero = -gridSize;
-            while (currDistFromZero > -winHeight/2 + Cnst.padding * 3)
+            while (currDistFromZero > -winHeight / 2 + Cnst.padding * 3)
             {
                 DrawStripAndNum(i, currDistFromZero, true); i += gridIncrement;
                 currDistFromZero -= gridSize;
@@ -542,10 +544,10 @@ namespace GraThing_by_TaniachiFractal
         /// <summary>
         /// Draw a single line of a param graph
         /// </summary>
-        private void DrawParametricGraphLine(Func<double, (double,double)> graphFunct, double startT, double endT, int graphNum)
+        private void DrawParametricGraphLine(Func<double, (double, double)> graphFunct, double startT, double endT, int graphNum)
         {
             (double startX, double startY) = graphFunct(startT);
-            (double endX, double endY) = graphFunct(endT);  
+            (double endX, double endY) = graphFunct(endT);
 
             Point start = DoubleToCoord(startX, startY);
             Point end = DoubleToCoord(endX, endY);
@@ -602,7 +604,7 @@ namespace GraThing_by_TaniachiFractal
             {
                 return Cnst.undefined;
             }
-            if (finY>winHeight*2||finY< -winHeight)
+            if (finY > winHeight * 2 || finY < -winHeight)
             {
                 return Cnst.undefined;
             }
@@ -613,7 +615,7 @@ namespace GraThing_by_TaniachiFractal
         /// <summary>
         /// Convert polar coordinates to cartesian
         /// </summary>
-        (double,double) PolarToCartesian(double R, double Phi)
+        (double, double) PolarToCartesian(double R, double Phi)
         {
             return (R * Math.Sin(Phi), R * Math.Cos(Phi));
         }
@@ -665,7 +667,7 @@ namespace GraThing_by_TaniachiFractal
         {
             /* For whatever reason, this is not present in designer.
              So I have to do it myself */
-            this.MouseWheel += GraphForm_MouseWheel; 
+            this.MouseWheel += GraphForm_MouseWheel;
 
             canvas = this.CreateGraphics();
 
@@ -793,12 +795,12 @@ namespace GraThing_by_TaniachiFractal
 
         double cool(double x)
         {
-            return Math.Sin(3*x)+40;
+            return Math.Sin(3 * x) + 40;
         }
 
         double log(double x)
         {
-            return Math.Log(x,4) * 10;
+            return Math.Log(x, 4) * 10;
         }
 
         double Xpow2(double x)
@@ -809,14 +811,14 @@ namespace GraThing_by_TaniachiFractal
         double SinX(double x)
         {
             return 50 * Math.Sin(0.5 * x);
-        }    
+        }
 
         double Cos(double x)
         {
-            return 2 * Math.Cos( x);
+            return 2 * Math.Cos(x);
         }
 
-      
+
 
         double eq2(double x)
         {
@@ -840,17 +842,17 @@ namespace GraThing_by_TaniachiFractal
 
         (double, double) Tparam(double t)
         {
-            return (t*t, t);
+            return (t * t, t);
         }
 
-        (double,double) CircleParam(double t)
+        (double, double) CircleParam(double t)
         {
             return (Math.Sin(t), Math.Cos(t));
         }
 
         (double, double) Ellipse(double t)
         {
-            return (Math.Sin(t), 2*Math.Cos(t));
+            return (Math.Sin(t), 2 * Math.Cos(t));
         }
 
         #endregion
