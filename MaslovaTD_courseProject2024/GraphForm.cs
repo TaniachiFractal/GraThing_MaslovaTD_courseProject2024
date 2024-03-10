@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -277,7 +278,7 @@ namespace GraThing_by_TaniachiFractal
                 newGridIncrement /= 10;
             }
 
-            newStep = newGridIncrement/100;
+            newStep = newGridIncrement / 100;
 
             this.Text = "" + newStep;
 
@@ -536,7 +537,7 @@ namespace GraThing_by_TaniachiFractal
             //  → >
             int currDistFromZero = gridSize;
             double i = gridIncrement;
-            while (currDistFromZero < winWidth)
+            while (currDistFromZero < winWidth - Cnst.padding * 3 - arrowHeight - horizMiddle)
             {
                 DrawStripAndNum(i, currDistFromZero, false); i += gridIncrement;
                 currDistFromZero += gridSize;
@@ -584,10 +585,53 @@ namespace GraThing_by_TaniachiFractal
             Point start = DoubleToCoord(startX, startY);
             Point end = DoubleToCoord(endX, endY);
 
+            if (startY * endY < 0)
+            {
+                double x0 = startX, x1 = endX;
+                do
+                {
+                    double y0 = graphFunct(x0), y1 = graphFunct(x1),
+                        xm = (x0 + x1) / 2, ym = graphFunct(xm);
+
+                    if (y0 * ym < 0)
+                        x1 = xm;
+                    else if (ym * y1 < 0)
+                        x0 = xm;
+
+                } while (Math.Abs(x0 - x1) > Cnst.epsilon);
+
+                double y = graphFunct((x0 + x1) / 2);
+
+                if (Math.Abs(y) > 1.0e-8)
+                {
+                    Point p1 = new Point(start.X, 0);
+                    Point p2 = new Point(end.X, 0);
+
+                    if (startY > 0)
+                    {
+                        p1.Y = -32767;
+                        p2.Y = 32768;
+                    }
+                    else
+                    {
+                        p1.Y = 32768;
+                        p2.Y = -32767;
+                    }
+
+                    try
+                    {
+                        canvas.DrawLine(GraphPen[graphNum], start, p1);
+                        canvas.DrawLine(GraphPen[graphNum], p2, end);
+                    } catch { }
+
+                    return;
+                }
+            }
+
             if (start != Cnst.undefined && end != Cnst.undefined)
             {
                 try { canvas.DrawLine(GraphPen[graphNum], start, end); }
-                catch { } // Draw line
+                catch { }
             }
 
         }
@@ -771,17 +815,14 @@ namespace GraThing_by_TaniachiFractal
             outX += horizMiddle;
             outY += vertMiddle;
 
+
+            if (Math.Abs(outX) > int.MaxValue - 1 || Math.Abs(outY) > int.MaxValue - 1)
+            {
+                return Cnst.undefined;
+            }
+
             int finX = (int)outX;
             int finY = (int)outY;
-
-            if (finX == int.MinValue || finY == int.MinValue || finX == int.MaxValue || finY == int.MaxValue)
-            {
-                return Cnst.undefined;
-            }
-            if (finY > winHeight * 2 || finY < -winHeight * 2)
-            {
-                return Cnst.undefined;
-            }
 
             return new Point(finX, finY);
         }

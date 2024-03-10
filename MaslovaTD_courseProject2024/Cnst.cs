@@ -18,6 +18,11 @@ namespace GraThing_by_TaniachiFractal
         public const int padding = 10;
 
         /// <summary>
+        /// The precision of calculating the break point of a discontinuous function 
+        /// </summary>
+        public const double epsilon = 1.0e-8;
+
+        /// <summary>
         /// The point that is returnded when the function result is undefined
         /// </summary>
         public static readonly Point undefined = new Point(int.MinValue, int.MinValue);
