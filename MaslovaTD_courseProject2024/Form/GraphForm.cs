@@ -128,17 +128,9 @@ namespace GraThing_by_TaniachiFractal
         double step;
 
         /// <summary>
-        /// The cartesian functions that are drawn currently
+        /// The cartesian and polar functions that are drawn currently
         /// </summary>
-        List<Func<double, double>> GraphFunction_cartesian = new List<Func<double, double>>();
-        /// <summary>
-        /// The polar functions from R that are drawn currently
-        /// </summary>
-        List<Func<double, double>> GraphFunction_polarFromR = new List<Func<double, double>>();
-        /// <summary>
-        /// The polar functions from Phi that are drawn currently
-        /// </summary>
-        List<Func<double, double>> GraphFunction_polarFromPhi = new List<Func<double, double>>();
+        List<Func<double, double>> GraphFunction_cartAndPolar = new List<Func<double, double>>();
         /// <summary>
         /// The parametric functions that are drawn currently
         /// </summary>
@@ -242,9 +234,8 @@ namespace GraThing_by_TaniachiFractal
             vertMiddle = winHeight / 2 - Cnst.padding;
 
             incrFntSz = winWidth / 40 / 3; if (incrFntSz > 5) incrFntSz = 5;
-            InitCartesianGraphs();
+            InitCartAndPolarGraphs();
             InitParametricGraphs();
-            InitPolarFromRGraphs();
         }
         /// <summary>
         /// Change the grid size and increment
@@ -280,7 +271,6 @@ namespace GraThing_by_TaniachiFractal
 
             newStep = newGridIncrement / 100;
 
-            this.Text = "" + newStep;
 
             if (newGridIncrement > 0.00001)
             {
@@ -326,10 +316,8 @@ namespace GraThing_by_TaniachiFractal
             gridSize = 30;
             step = 0.01;
 
-            InitCartesianGraphs();
+            InitCartAndPolarGraphs();
             InitParametricGraphs();
-            InitPolarFromRGraphs();
-            InitPolarFromPhiGraphs();
         }
 
         /// <summary>
@@ -344,62 +332,23 @@ namespace GraThing_by_TaniachiFractal
         }
 
         /// <summary>
-        /// Init current cartesian graphs functions
+        /// Init current cartesian and polar graphs functions
         /// </summary>
-        private void InitCartesianGraphs()
+        private void InitCartAndPolarGraphs()
         {
-            GraphFunction_cartesian.Add(Math.Tan);
-            GraphFunction_cartesian.Add(SinX);
-            GraphFunction_cartesian.Add(Math.Log);
+            GraphFunction_cartAndPolar.Add(SinX);
+            GraphFunction_cartAndPolar.Add(SinX);
+            GraphFunction_cartAndPolar.Add(Hyperbola);
 
-            GraphFunction_cartesian.Add(Hyperbola);
-            GraphFunction_cartesian.Add(HalfCircle);
-            GraphFunction_cartesian.Add(eqX);
+            GraphFunction_cartAndPolar.Add(Hyperbola);
+            GraphFunction_cartAndPolar.Add(HalfCircle);
+            GraphFunction_cartAndPolar.Add(eqX);
 
-            GraphFunction_cartesian.Add(Math.Tan);
-            GraphFunction_cartesian.Add(Math.Cos);
-            GraphFunction_cartesian.Add(Math.Round);
+            GraphFunction_cartAndPolar.Add(Math.Tan);
+            GraphFunction_cartAndPolar.Add(Math.Cos);
+            GraphFunction_cartAndPolar.Add(Math.Round);
 
-            GraphFunction_cartesian.Add(Math.Abs);
-        }
-        /// <summary>
-        /// Init current polar graphs from R functions
-        /// </summary>
-        private void InitPolarFromRGraphs()
-        {
-
-            GraphFunction_polarFromR.Add(Xpow2);
-            GraphFunction_polarFromR.Add(SinX);
-            GraphFunction_polarFromR.Add(eq2);
-
-            GraphFunction_polarFromR.Add(Hyperbola);
-            GraphFunction_polarFromR.Add(HalfCircle);
-            GraphFunction_polarFromR.Add(eqX);
-
-            GraphFunction_polarFromR.Add(Math.Tan);
-            GraphFunction_polarFromR.Add(Math.Cos);
-            GraphFunction_polarFromR.Add(Math.Log);
-
-            GraphFunction_polarFromR.Add(Math.Abs);
-        }
-        /// <summary>
-        /// Init current polar graphs from Phi functions
-        /// </summary>
-        private void InitPolarFromPhiGraphs()
-        {
-            GraphFunction_polarFromPhi.Add(Xpow2);
-            GraphFunction_polarFromPhi.Add(Cos);
-            GraphFunction_polarFromPhi.Add(eq2);
-
-            GraphFunction_polarFromPhi.Add(Hyperbola);
-            GraphFunction_polarFromPhi.Add(HalfCircle);
-            GraphFunction_polarFromPhi.Add(eqX);
-
-            GraphFunction_polarFromPhi.Add(Math.Tan);
-            GraphFunction_polarFromPhi.Add(Math.Cos);
-            GraphFunction_polarFromPhi.Add(Math.Log);
-
-            GraphFunction_polarFromPhi.Add(Math.Abs);
+            GraphFunction_cartAndPolar.Add(Math.Abs);
         }
         /// <summary>
         /// Init current parametric graphs functions
@@ -407,7 +356,7 @@ namespace GraThing_by_TaniachiFractal
         private void InitParametricGraphs()
         {
             GraphFunction_parametric.Add(Tparam);
-            GraphFunction_parametric.Add(Tparam);
+            GraphFunction_parametric.Add(CircleParam);
             GraphFunction_parametric.Add(Ellipse);
 
             GraphFunction_parametric.Add(Tparam);
@@ -654,7 +603,7 @@ namespace GraThing_by_TaniachiFractal
         {
             for (int i = 0; i < GraphCount; i++)
             {
-                DrawOneCartesianGraph(GraphFunction_cartesian[i], i);
+                DrawOneCartesianGraph(GraphFunction_cartAndPolar[i], i);
             }
         }
 
@@ -702,7 +651,7 @@ namespace GraThing_by_TaniachiFractal
         {
             for (int i = 0; i < GraphCount; i++)
             {
-                DrawOnePolarFromRGraph(GraphFunction_polarFromR[i], i);
+                DrawOnePolarFromRGraph(GraphFunction_cartAndPolar[i], i);
             }
         }
 
@@ -750,7 +699,7 @@ namespace GraThing_by_TaniachiFractal
         {
             for (int i = 0; i < GraphCount; i++)
             {
-                DrawOnePolarFromPhiGraph(GraphFunction_polarFromPhi[i], i);
+                DrawOnePolarFromPhiGraph(GraphFunction_cartAndPolar[i], i);
             }
         }
 
@@ -879,7 +828,7 @@ namespace GraThing_by_TaniachiFractal
 
         double SinX(double x)
         {
-            return 50 * Math.Sin(0.5 * x);
+            return 2 * Math.Sin(0.5 * x);
         }
 
         double Cos(double x)

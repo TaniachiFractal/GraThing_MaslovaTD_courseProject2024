@@ -50,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>GraThing.ico</ApplicationIcon>
+    <ApplicationIcon>Misc\GraThing.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -66,24 +66,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cnst.cs" />
-    <Compile Include="Colors.cs" />
-    <Compile Include="GraphForm.cs">
+    <Compile Include="Misc Classes\Cnst.cs" />
+    <Compile Include="Misc Classes\Colors.cs" />
+    <Compile Include="Form\GraphForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GraphForm.Designer.cs">
+    <Compile Include="Form\GraphForm.Designer.cs">
       <DependentUpon>GraphForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LabelAndTextBox.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Misc Classes\LabelAndTextBox.cs" />
+    <Compile Include="Parse\MathParser.cs" />
+    <Compile Include="Misc\Program.cs" />
+    <Compile Include="Parse\StringAndParamFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsForm.cs">
+    <Compile Include="Form\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
+    <Compile Include="Form\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="GraphForm.resx">
+    <Compile Include="Parse\StandardFunctions.cs" />
+    <Compile Include="Parse\StringAndFunc.cs" />
+    <EmbeddedResource Include="Form\GraphForm.resx">
       <DependentUpon>GraphForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -96,7 +100,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SettingsForm.resx">
+    <EmbeddedResource Include="Form\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -113,7 +117,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GraThing.ico" />
+    <Content Include="Misc\GraThing.ico" />
     <None Include="Resources\GraThing.png" />
   </ItemGroup>
   <ItemGroup>
