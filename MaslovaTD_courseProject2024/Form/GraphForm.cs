@@ -722,6 +722,11 @@ namespace GraThing_by_TaniachiFractal
             outY += vertMiddle;
 
 
+            if (double.IsNaN(outY) || double.IsNaN(outX))
+            {
+                return Cnst.undefined;
+            }
+
             if (Math.Abs(outX) > int.MaxValue - 1 || Math.Abs(outY) > int.MaxValue - 1)
             {
                 return Cnst.undefined;
@@ -730,7 +735,7 @@ namespace GraThing_by_TaniachiFractal
             int finX = (int)outX;
             int finY = (int)outY;
 
-            if (finX<-7*winWidth || finX>7*winWidth || finY<-7*winHeight || finY>7*winHeight)
+            if (finX<-20*winWidth || finX>20*winWidth || finY<-20*winHeight || finY>20*winHeight)
             {
                 return Cnst.undefined;
             }
