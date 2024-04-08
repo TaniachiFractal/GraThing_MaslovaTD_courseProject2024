@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -45,6 +44,15 @@ namespace GraThing_by_TaniachiFractal
                     DrawParametricGraphs(); break;
             }
         }
+
+        /// <summary>
+        /// The cartesian and polar functions that are drawn currently
+        /// </summary>
+        public List<Func<double, double>> GraphFunction_cartAndPolar = new List<Func<double, double>>();
+        /// <summary>
+        /// The parametric functions that are drawn currently
+        /// </summary>
+        public List<Func<double, (double, double)>> GraphFunction_parametric = new List<Func<double, (double, double)>>();
 
         /// <summary>
         /// Form constructor
@@ -127,14 +135,7 @@ namespace GraThing_by_TaniachiFractal
         /// </summary>
         double step;
 
-        /// <summary>
-        /// The cartesian and polar functions that are drawn currently
-        /// </summary>
-        List<Func<double, double>> GraphFunction_cartAndPolar = new List<Func<double, double>>();
-        /// <summary>
-        /// The parametric functions that are drawn currently
-        /// </summary>
-        List<Func<double, (double, double)>> GraphFunction_parametric = new List<Func<double, (double, double)>>();
+
 
         #endregion
 
@@ -234,8 +235,6 @@ namespace GraThing_by_TaniachiFractal
             vertMiddle = winHeight / 2 - Cnst.padding;
 
             incrFntSz = winWidth / 40 / 3; if (incrFntSz > 5) incrFntSz = 5;
-            InitCartAndPolarGraphs();
-            InitParametricGraphs();
         }
         /// <summary>
         /// Change the grid size and increment
@@ -315,9 +314,6 @@ namespace GraThing_by_TaniachiFractal
             VertAxisName = "y";
             gridSize = 30;
             step = 0.01;
-
-            InitCartAndPolarGraphs();
-            InitParametricGraphs();
         }
 
         /// <summary>
@@ -329,45 +325,6 @@ namespace GraThing_by_TaniachiFractal
             {
                 GraphPen[i] = new Pen(Colors.GraphColor[i], 1);
             }
-        }
-
-        /// <summary>
-        /// Init current cartesian and polar graphs functions
-        /// </summary>
-        private void InitCartAndPolarGraphs()
-        {
-            GraphFunction_cartAndPolar.Add(SinX);
-            GraphFunction_cartAndPolar.Add(SinX);
-            GraphFunction_cartAndPolar.Add(Hyperbola);
-
-            GraphFunction_cartAndPolar.Add(Hyperbola);
-            GraphFunction_cartAndPolar.Add(HalfCircle);
-            GraphFunction_cartAndPolar.Add(eqX);
-
-            GraphFunction_cartAndPolar.Add(Math.Tan);
-            GraphFunction_cartAndPolar.Add(Math.Cos);
-            GraphFunction_cartAndPolar.Add(Math.Round);
-
-            GraphFunction_cartAndPolar.Add(Math.Abs);
-        }
-        /// <summary>
-        /// Init current parametric graphs functions
-        /// </summary>
-        private void InitParametricGraphs()
-        {
-            GraphFunction_parametric.Add(Tparam);
-            GraphFunction_parametric.Add(CircleParam);
-            GraphFunction_parametric.Add(Ellipse);
-
-            GraphFunction_parametric.Add(Tparam);
-            GraphFunction_parametric.Add(CircleParam);
-            GraphFunction_parametric.Add(Ellipse);
-
-            GraphFunction_parametric.Add(Tparam);
-            GraphFunction_parametric.Add(CircleParam);
-            GraphFunction_parametric.Add(Ellipse);
-
-            GraphFunction_parametric.Add(Tparam);
         }
 
         #endregion
@@ -534,7 +491,7 @@ namespace GraThing_by_TaniachiFractal
             Point start = DoubleToCoord(startX, startY);
             Point end = DoubleToCoord(endX, endY);
 
-            if (startY * endY < 0)
+            if (startY * endY < 0) // if line crosses x axis
             {
                 double x0 = startX, x1 = endX;
                 do
@@ -567,20 +524,20 @@ namespace GraThing_by_TaniachiFractal
                         p2.Y = -32767;
                     }
 
-                    try
+                    if (start != Cnst.undefined && end != Cnst.undefined)
                     {
+
                         canvas.DrawLine(GraphPen[graphNum], start, p1);
                         canvas.DrawLine(GraphPen[graphNum], p2, end);
-                    } catch { }
 
+                    }
                     return;
                 }
             }
 
             if (start != Cnst.undefined && end != Cnst.undefined)
             {
-                try { canvas.DrawLine(GraphPen[graphNum], start, end); }
-                catch { }
+                canvas.DrawLine(GraphPen[graphNum], start, end);
             }
 
         }
@@ -773,6 +730,11 @@ namespace GraThing_by_TaniachiFractal
             int finX = (int)outX;
             int finY = (int)outY;
 
+            if (finX<-7*winWidth || finX>7*winWidth || finY<-7*winHeight || finY>7*winHeight)
+            {
+                return Cnst.undefined;
+            }
+
             return new Point(finX, finY);
         }
 
@@ -805,72 +767,6 @@ namespace GraThing_by_TaniachiFractal
             if (input > 0) return 1;
             if (input < 0) return -1;
             return 0;
-        }
-
-        #endregion
-
-        #region functions to draw
-
-        double cool(double x)
-        {
-            return Math.Sin(3 * x) + 40;
-        }
-
-        double log(double x)
-        {
-            return Math.Log(x, 4) * 10;
-        }
-
-        double Xpow2(double x)
-        {
-            return x * x;
-        }
-
-        double SinX(double x)
-        {
-            return 2 * Math.Sin(0.5 * x);
-        }
-
-        double Cos(double x)
-        {
-            return 2 * Math.Cos(x);
-        }
-
-
-
-        double eq2(double x)
-        {
-            return 2;
-        }
-
-        double Hyperbola(double x)
-        {
-            return 4 / x;
-        }
-
-        double HalfCircle(double x)
-        {
-            return Math.Sqrt(4 - x * x);
-        }
-
-        double eqX(double x)
-        {
-            return 2 * x;
-        }
-
-        (double, double) Tparam(double t)
-        {
-            return (t * t, t);
-        }
-
-        (double, double) CircleParam(double t)
-        {
-            return (Math.Sin(t), Math.Cos(t));
-        }
-
-        (double, double) Ellipse(double t)
-        {
-            return (Math.Sin(t), 2 * Math.Cos(t));
         }
 
         #endregion
