@@ -735,7 +735,7 @@ namespace GraThing_by_TaniachiFractal
             int finX = (int)outX;
             int finY = (int)outY;
 
-            if (finX<-20*winWidth || finX>20*winWidth || finY<-20*winHeight || finY>20*winHeight)
+            if (finX < -100000 * winWidth || finX > 100000 * winWidth || finY < -100000 * winHeight || finY > 100000 * winHeight)
             {
                 return Cnst.undefined;
             }
@@ -748,7 +748,7 @@ namespace GraThing_by_TaniachiFractal
         /// </summary>
         (double, double) PolarToCartesian(double R, double Phi)
         {
-            return (R * Math.Sin(Phi), R * Math.Cos(Phi));
+            return (R * Math.Cos(Phi), R * Math.Sin(Phi));
         }
 
         /// <summary>
