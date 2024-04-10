@@ -20,7 +20,10 @@ namespace GraThing_by_TaniachiFractal
             { "y=x^2", Pow2 },
             { "y=1/x", Hyperbola },
             { "y=|x|", Math.Abs },
-            { "y=sqrt(x)", Math.Sqrt}
+            { "y=sqrt(x)", Math.Sqrt},
+            { "y=x",  EqX },
+            { "y=x^3", Pow3 },
+            { "y=tan|x|", TanAbs}
         };
 
         /// <summary>
@@ -34,7 +37,10 @@ namespace GraThing_by_TaniachiFractal
         };
 
         static double Pow2(double x) { return x * x; }
+        static double Pow3(double x) { return x * x * x; }
         static double Hyperbola(double x) { return 1 / x; }
+        static double TanAbs(double x) { return Math.Tan(Math.Abs(x)); }
+        static double EqX(double x) { return x; }
         static (double, double) SidewaysParabola(double t) { return (t * t, t); }
         static (double, double) Circle(double t) { return (Math.Sin(t), Math.Cos(t)); }
         static (double, double) Ellipse(double t) { return (Math.Sin(t), 2 * Math.Cos(t)); }
