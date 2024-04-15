@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GraThing_by_TaniachiFractal
 {
+    /// <summary>
+    /// Contains preset functions and their corresponding strings
+    /// </summary>
     class StandardFunctions
     {
         /// <summary>
