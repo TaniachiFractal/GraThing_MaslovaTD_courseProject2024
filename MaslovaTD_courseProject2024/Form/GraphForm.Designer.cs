@@ -43,7 +43,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.MinimumSize = new System.Drawing.Size(292, 377);
             this.Name = "GraphForm";
-            this.Text = "GraThing - график функции";
+            this.Text = "GraThing - графики функций";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GraphForm_FormClosing);
             this.Load += new System.EventHandler(this.GraphForm_Load);
             this.ResizeEnd += new System.EventHandler(this.GraphForm_ResizeEnd);
