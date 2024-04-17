@@ -38,12 +38,7 @@ namespace GraThing_by_TaniachiFractal
         /// </summary>
         private void BtDraw_Click(object sender, EventArgs e)
         {
-            graphForm.Show();
-            UpdateGraphCount();
-            Update_tMaxMin();
-            UpdateCoordSysId();
-            ParseFunctions();
-            graphForm.DrawAll();
+            BootGraphForm();
         }
 
         /// <summary>
@@ -106,6 +101,16 @@ namespace GraThing_by_TaniachiFractal
         #endregion
 
         #region init
+
+        private void BootGraphForm()
+        {
+            graphForm.Show();
+            UpdateGraphCount();
+            Update_tMaxMin();
+            UpdateCoordSysId();
+            ParseFunctions();
+            graphForm.DrawAll();
+        }
 
         /// <summary>
         /// Update the coordinate system id based on radiobuttons
