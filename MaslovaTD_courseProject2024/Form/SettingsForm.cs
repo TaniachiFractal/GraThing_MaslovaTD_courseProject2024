@@ -161,6 +161,29 @@ namespace GraThing_by_TaniachiFractal
             }
         }
 
+        /// <summary>
+        /// Parse functions in textboxes
+        /// </summary>
+        private void ParseFunctions()
+        {
+            graphForm.GraphFunction_parametric.Clear();
+            graphForm.GraphFunction_cartAndPolar.Clear();
+            if (graphForm.CoordSys_Id == Cnst.PARAM_ID)
+            {
+                foreach (LabeledTextBox ltb in functionTB)
+                {
+                    graphForm.GraphFunction_parametric.Add(MathParser.ParseMath_Param(ltb.Text));
+                }
+            }
+            else
+            {
+                foreach (LabeledTextBox ltb in functionTB)
+                {
+                    graphForm.GraphFunction_cartAndPolar.Add(MathParser.ParseMath(ltb.Text));
+                }
+            }
+        }
+
         #endregion
 
         #region render
@@ -189,29 +212,7 @@ namespace GraThing_by_TaniachiFractal
             this.Height = functionTB[currTbCou-1].tb.Bottom + 55;
             btDraw.Top = functionTB[currTbCou-1].tb.Bottom - btDraw.Height;
         }
-
-        /// <summary>
-        /// Parse functions in textboxes
-        /// </summary>
-        private void ParseFunctions()
-        {
-            graphForm.GraphFunction_parametric.Clear();
-            graphForm.GraphFunction_cartAndPolar.Clear();
-            if (graphForm.CoordSys_Id==Cnst.PARAM_ID)
-            {
-                foreach (LabeledTextBox ltb in functionTB)
-                {
-                    graphForm.GraphFunction_parametric.Add(MathParser.ParseMath_Param(ltb.Text));
-                }
-            }
-            else
-            {
-                foreach (LabeledTextBox ltb in functionTB)
-                {
-                    graphForm.GraphFunction_cartAndPolar.Add(MathParser.ParseMath(ltb.Text));
-                }
-            }
-        }
+      
 
         #endregion  
     }
