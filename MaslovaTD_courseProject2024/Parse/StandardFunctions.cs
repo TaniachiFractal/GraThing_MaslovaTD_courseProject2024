@@ -36,7 +36,8 @@ namespace GraThing_by_TaniachiFractal
         {
             { "x=t*t; y=t",SidewaysParabola },
             { "x=sin(t); y=cos(t)",Circle },
-            { "x=sin(t); y=2cos(t)",Ellipse }
+            { "x=sin(t); y=2cos(t)",Ellipse },
+            { "s=sin(t); y=sin(t)",SinTSinT }
         };
 
         static double Pow2(double x) { return x * x; }
@@ -47,6 +48,6 @@ namespace GraThing_by_TaniachiFractal
         static (double, double) SidewaysParabola(double t) { return (t * t, t); }
         static (double, double) Circle(double t) { return (Math.Sin(t), Math.Cos(t)); }
         static (double, double) Ellipse(double t) { return (Math.Sin(t), 2 * Math.Cos(t)); }
-
+        static (double, double) SinTSinT(double t) { return (Math.Sin(t), Math.Sin(t)); }
     }
 }
