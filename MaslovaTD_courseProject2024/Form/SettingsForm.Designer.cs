@@ -36,6 +36,7 @@
             this.GraphCountNUD = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.coordSys_panel = new System.Windows.Forms.Panel();
+            this.rbPolarFromPhi = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.rbParam = new System.Windows.Forms.RadioButton();
             this.rbPolarFromR = new System.Windows.Forms.RadioButton();
@@ -45,7 +46,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.paramMaxMin_panel = new System.Windows.Forms.Panel();
-            this.rbPolarFromPhi = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GraphCountNUD)).BeginInit();
             this.coordSys_panel.SuspendLayout();
@@ -109,6 +109,7 @@
             0,
             0});
             this.GraphCountNUD.Name = "GraphCountNUD";
+            this.GraphCountNUD.ReadOnly = true;
             this.GraphCountNUD.Size = new System.Drawing.Size(64, 40);
             this.GraphCountNUD.TabIndex = 10;
             this.GraphCountNUD.Value = new decimal(new int[] {
@@ -138,6 +139,16 @@
             this.coordSys_panel.Name = "coordSys_panel";
             this.coordSys_panel.Size = new System.Drawing.Size(172, 128);
             this.coordSys_panel.TabIndex = 12;
+            // 
+            // rbPolarFromPhi
+            // 
+            this.rbPolarFromPhi.AutoSize = true;
+            this.rbPolarFromPhi.Location = new System.Drawing.Point(7, 70);
+            this.rbPolarFromPhi.Name = "rbPolarFromPhi";
+            this.rbPolarFromPhi.Size = new System.Drawing.Size(152, 29);
+            this.rbPolarFromPhi.TabIndex = 14;
+            this.rbPolarFromPhi.Text = "Полярная от φ";
+            this.rbPolarFromPhi.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -234,18 +245,9 @@
             this.paramMaxMin_panel.TabIndex = 17;
             this.paramMaxMin_panel.Visible = false;
             // 
-            // rbPolarFromPhi
-            // 
-            this.rbPolarFromPhi.AutoSize = true;
-            this.rbPolarFromPhi.Location = new System.Drawing.Point(7, 70);
-            this.rbPolarFromPhi.Name = "rbPolarFromPhi";
-            this.rbPolarFromPhi.Size = new System.Drawing.Size(152, 29);
-            this.rbPolarFromPhi.TabIndex = 14;
-            this.rbPolarFromPhi.Text = "Полярная от φ";
-            this.rbPolarFromPhi.UseVisualStyleBackColor = true;
-            // 
             // SettingsForm
             // 
+            this.AcceptButton = this.btDraw;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(51)))));

@@ -231,8 +231,8 @@ namespace GraThing_by_TaniachiFractal
 
             arrowHeight = winWidth / 150; if (arrowHeight < 6) arrowHeight = 6;
             arrowWidth = arrowHeight / 2;
-            horizMiddle = winWidth / 2 - Cnst.padding;
-            vertMiddle = winHeight / 2 - Cnst.padding;
+            horizMiddle = (winWidth / 2) - Cnst.padding;
+            vertMiddle = (winHeight / 2) - Cnst.padding;
 
             incrFntSz = winWidth / 40 / 3; if (incrFntSz > 5) incrFntSz = 5;
         }
@@ -246,9 +246,9 @@ namespace GraThing_by_TaniachiFractal
             double newGridSize, newGridIncrement = gridIncrement, newStep = step;
             #region newGridSize
             if (gridSize < 40)
-                newGridSize = gridSize + direction * 10;
+                newGridSize = gridSize + (direction * 10);
             else
-                newGridSize = gridSize + direction * 20;
+                newGridSize = gridSize + (direction * 20);
 
             newGridSize -= newGridSize % 10;
 
@@ -298,8 +298,8 @@ namespace GraThing_by_TaniachiFractal
 
             arrowHeight = winWidth / 150; if (arrowHeight < 6) arrowHeight = 6;
             arrowWidth = arrowHeight / 2;
-            horizMiddle = winWidth / 2 - Cnst.padding;
-            vertMiddle = winHeight / 2 - Cnst.padding;
+            horizMiddle = (winWidth / 2) - Cnst.padding;
+            vertMiddle = (winHeight / 2) - Cnst.padding;
 
             incrFntSz = winWidth / 40 / 3; if (incrFntSz > 8) incrFntSz = 8;
 
@@ -342,7 +342,7 @@ namespace GraThing_by_TaniachiFractal
 
             Point vertAxisEnd = new Point(horizMiddle, Cnst.padding),
                   vertAxisStart = new Point(horizMiddle, winHeight),
-                  horizAxisEnd = new Point(winWidth - Cnst.padding * 3, vertMiddle),
+                  horizAxisEnd = new Point(winWidth - (Cnst.padding * 3), vertMiddle),
                   horizAxisStart = new Point(0, vertMiddle),
                   center = new Point(horizMiddle, vertMiddle);
 
@@ -363,9 +363,9 @@ namespace GraThing_by_TaniachiFractal
                 new Point(horizMiddle + arrowWidth, Cnst.padding + arrowHeight));
 
             canvas.DrawLine(AxisPen, horizAxisEnd,
-                new Point(winWidth - Cnst.padding * 3 - arrowHeight, vertMiddle + arrowWidth)); // >
+                new Point(winWidth - (Cnst.padding * 3) - arrowHeight, vertMiddle + arrowWidth)); // >
             canvas.DrawLine(AxisPen, horizAxisEnd,
-                new Point(winWidth - Cnst.padding * 3 - arrowHeight, vertMiddle - arrowWidth));
+                new Point(winWidth - (Cnst.padding * 3) - arrowHeight, vertMiddle - arrowWidth));
 
             #endregion
 
@@ -443,7 +443,7 @@ namespace GraThing_by_TaniachiFractal
             //  → >
             int currDistFromZero = gridSize;
             double i = gridIncrement;
-            while (currDistFromZero < winWidth - Cnst.padding * 3 - arrowHeight - horizMiddle)
+            while (currDistFromZero < winWidth - (Cnst.padding * 3) - arrowHeight - horizMiddle)
             {
                 DrawStripAndNum(i, currDistFromZero, false); i += gridIncrement;
                 currDistFromZero += gridSize;
@@ -643,7 +643,7 @@ namespace GraThing_by_TaniachiFractal
         private void DrawOnePolarFromPhiGraph(Func<double, double> graphFunct, int graphNum)
         {
             if (step > 0.1) step = 0.1;
-            for (double i = currMinX * 2; i < currMaxX * 2; i += step)
+            for (double i = currMinX * 2 * 0.05 / step; i < currMaxX * 2 * 0.05 / step; i += step)
             {
                 DrawPolarFromPhiGraphLine(graphFunct, i, i + step, graphNum);
             }
@@ -758,9 +758,9 @@ namespace GraThing_by_TaniachiFractal
         {
 
             double output = Math.Sqrt(
-                     (point1.X - point2.X) * (point1.X - point2.X)
+                     ((point1.X - point2.X) * (point1.X - point2.X))
                    +
-                     (point1.Y - point2.Y) * (point1.Y - point2.Y)
+                     ((point1.Y - point2.Y) * (point1.Y - point2.Y))
                             );
             return output;
 
